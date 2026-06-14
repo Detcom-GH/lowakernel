@@ -27,6 +27,7 @@ Faster boot. Better responsiveness. Slightly better performance. Lower power con
 
 ### detkernel-universal
 Built with `-march=x86-64-v3`, compatible with all AMD Zen1+ ThinkPads (T495 and newer). The safe choice if you're unsure which variant to use.
+Includes NTSYNC (NT synchronization primitives for Wine/Proton) as a module
 
 ### detkernel-zen5
 Built with `-march=znver5`, optimized specifically for Zen5 (Ryzen AI 300 series). Includes additional tuning:
