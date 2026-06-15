@@ -1,21 +1,8 @@
 #!/usr/bin/env bash
-# ================================================================
-#  detkernel-universal-build.sh
-#  Custom Linux kernel for AMD ThinkPads — Universal build
-#
-#  Target:  All AMD ThinkPads (Zen1+)
-#  Arch:    x86-64-v3 (compatible with T495 and newer)
-#
-#  Supported models:
-#    T495 · T14/T14s/T16 G1-G6 · P14s G1-G6 · P15v G1-G3
-#    L14/L15 G1-G4
-#
-#  Usage:
-#    ./detkernel-universal-build.sh
-#    KERNEL_VERSION=7.0.11 ./detkernel-universal-build.sh
-#
-#  Result: /boot/EFI/Linux/detkernel-universal.efi (UKI)
-# ================================================================
+# detkernel-universal build script
+# builds for all amd thinkpads, zen1 and newer
+# just run it, should work. tested on p14s gen6
+# if something breaks open an issue i guess
 
 set -euo pipefail
 
@@ -32,7 +19,7 @@ success() { echo -e "${GREEN}[OK]${NC}    $*"; }
 warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error()   { echo -e "${RED}[ERR]${NC}   $*"; exit 1; }
 
-# ---------------------------------------------------------------
+# check if we have everything we need
 check_deps() {
   info "Checking dependencies..."
   local missing=()
@@ -56,7 +43,7 @@ check_deps() {
   success "Dependencies OK"
 }
 
-# ---------------------------------------------------------------
+# grab the right zen tag and checkout
 fetch_source() {
   [[ -d "$BUILD_DIR/linux-zen" ]] || error "linux-zen not found at $BUILD_DIR/linux-zen"
   cd "$BUILD_DIR/linux-zen"
@@ -84,7 +71,7 @@ fetch_source() {
   success "Source: $(git describe --tags) → EXTRAVERSION cleared"
 }
 
-# ---------------------------------------------------------------
+# the big one - strip all the crap we dont need
 apply_config() {
   info "Applying config..."
 
@@ -98,13 +85,13 @@ apply_config() {
   scripts/config --set-str LOCALVERSION ""
   scripts/config --disable LOCALVERSION_AUTO
 
-  # EFI STUB — required for UKI
+  # efi stub, obviously needed for uki to work
   scripts/config --enable  EFI
   scripts/config --enable  EFI_STUB
   scripts/config --enable  EFI_MIXED
   scripts/config --enable  EFIVAR_FS
 
-  # Compression
+  # zstd everywhere, faster than xz and good enough
   scripts/config --enable  KERNEL_ZSTD
   scripts/config --disable KERNEL_GZIP
   scripts/config --disable KERNEL_BZIP2
@@ -116,7 +103,7 @@ apply_config() {
   scripts/config --disable MODULE_COMPRESS_XZ
   scripts/config --disable MODULE_COMPRESS_GZIP
 
-  # AMD CPU
+  # amd stuff, keep all of it
   scripts/config --enable  CPU_SUP_AMD
   scripts/config --enable  MICROCODE_AMD
   scripts/config --enable  X86_MCE_AMD
@@ -125,28 +112,28 @@ apply_config() {
   scripts/config --enable  AMD_IOMMU
   scripts/config --enable  PINCTRL_AMD
 
-  # Intel CPU — remove
+  # bye intel
   scripts/config --disable CPU_SUP_INTEL
   scripts/config --disable MICROCODE_INTEL
   scripts/config --disable X86_MCE_INTEL
 
-  # Intel GPU — remove
+  # no i915 or xe, we dont have intel gpu
   scripts/config --disable DRM_I915
   scripts/config --disable DRM_I915_GVT
   scripts/config --disable DRM_I915_GVT_KVMGT
   scripts/config --disable DRM_XE
 
-  # NVIDIA — remove
+  # no nvidia either
   scripts/config --disable DRM_NOUVEAU
 
-  # AMD GPU
+  # amdgpu as module! not builtin, breaks renderD128 on boot
   scripts/config --module  DRM_AMDGPU
   scripts/config --enable  DRM_AMD_DC
   scripts/config --enable  DRM_AMD_DC_DCN
   scripts/config --enable  DRM_AMD_DC_FP
   scripts/config --enable  HSA_AMD
 
-  # DRM — legacy/server GPU drivers
+  # old gpu junk nobody uses anymore
   scripts/config --disable DRM_AST
   scripts/config --disable DRM_MGAG200
   scripts/config --disable DRM_R128
@@ -157,20 +144,20 @@ apply_config() {
   scripts/config --disable DRM_VIA
   scripts/config --disable DRM_VOODOO
 
-  # WiFi — Intel (T495, T14/P14s G1-G5, L14/L15 G1-G4)
+  # intel wifi for older thinkpads
   scripts/config --enable  IWLWIFI
   scripts/config --enable  IWLMVM
   scripts/config --disable IWLDVM
   scripts/config --disable IWLWIFI_DEBUG
 
-  # WiFi — Qualcomm (T14/P14s/T16 G3-G6, L14/L15 G3-G4)
+  # qualcomm for the newer ones
   scripts/config --enable  ATH11K
   scripts/config --enable  ATH11K_PCI
   scripts/config --disable ATH11K_DEBUG
   scripts/config --enable  ATH12K
   scripts/config --enable  ATH12K_PCI
 
-  # WiFi — MediaTek (L14/L15 G1-G3, T14 G6, P14s G6)
+  # mediatek, L series and newer T14
   scripts/config --enable  MT76_CORE
   scripts/config --enable  MT76_CONNAC_LIB
   scripts/config --enable  MT7921_COMMON
@@ -178,12 +165,12 @@ apply_config() {
   scripts/config --enable  MT7925_COMMON
   scripts/config --enable  MT7925E
 
-  # WiFi — Realtek (L14/L15 G1-G2 some configs)
+  # realtek wifi in some L14/L15
   scripts/config --enable  RTW89
   scripts/config --enable  RTW89_8852AE
   scripts/config --enable  RTW89_PCI
 
-  # WiFi — remove
+  # old wifi drivers, none of this runs on thinkpads
   scripts/config --disable BRCMFMAC
   scripts/config --disable BRCMSMAC
   scripts/config --disable RT2800PCI
@@ -212,7 +199,7 @@ apply_config() {
   scripts/config --disable SPECTRUM_CS
   scripts/config --disable ORINOCO_USB
 
-  # LAN
+  # r8169 is in every thinkpad, keep it. rest is garbage
   scripts/config --enable  R8169
   scripts/config --disable TR
   scripts/config --disable FDDI
@@ -235,7 +222,7 @@ apply_config() {
   scripts/config --disable NET_VENDOR_NATSEMI
   scripts/config --disable NET_VENDOR_ADAPTEC
 
-  # Audio — AMD + Realtek (ALC257/ALC287) + USB audio
+  # audio - realtek codec + amd acp + usb audio for external interfaces
   scripts/config --enable  SND_HDA_CODEC_REALTEK
   scripts/config --enable  SND_HDA_CODEC_HDMI
   scripts/config --enable  SND_HDA_INTEL
@@ -248,7 +235,7 @@ apply_config() {
   scripts/config --enable  SND_SOC_AMD_ACP70
   scripts/config --enable  SOUNDWIRE_AMD
 
-  # Audio — Intel Sound — remove
+  # intel audio, not needed
   scripts/config --disable SND_SOC_INTEL_SST_ACPI
   scripts/config --disable SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES
   scripts/config --disable SND_SOC_INTEL_MACH
@@ -262,7 +249,7 @@ apply_config() {
   scripts/config --disable SND_INTEL_NHLT
   scripts/config --disable SND_INTEL_DSP_CONFIG
 
-  # Audio HDA codecs — remove non-Realtek/non-HDMI
+  # remove hda codecs we dont have. keeping realtek and hdmi
   scripts/config --disable SND_HDA_CODEC_ANALOG
   scripts/config --disable SND_HDA_CODEC_SIGMATEL
   scripts/config --disable SND_HDA_CODEC_VIA
@@ -276,7 +263,8 @@ apply_config() {
   scripts/config --disable SND_HDA_CODEC_NVHDMI
   scripts/config --disable SND_HDA_CODEC_SI3054
 
-  # USB audio — specific vendor drivers
+  # specific usb audio drivers we dont need
+  # note: snd-usb-audio stays! thats the generic uac2 driver
   scripts/config --disable SND_USB_6FIRE
   scripts/config --disable SND_USB_CAIAQ
   scripts/config --disable SND_USB_HIFACE
@@ -287,7 +275,7 @@ apply_config() {
   scripts/config --disable SND_USB_VARIAX
   scripts/config --disable SND_BCD2000
 
-  # USB — specific devices not on ThinkPad
+  # random usb stuff that doesnt belong here
   scripts/config --disable USB_ATM
   scripts/config --disable USB_SPEEDTOUCH
   scripts/config --disable USB_CXACRU
@@ -308,7 +296,7 @@ apply_config() {
   scripts/config --disable USB_IDMOUSE
   scripts/config --disable USB_CHAOSKEY
 
-  # SCSI — server controllers
+  # server raid controllers lol
   scripts/config --disable SCSI_AACRAID
   scripts/config --disable SCSI_AIC7XXX
   scripts/config --disable SCSI_AIC79XX
@@ -342,7 +330,7 @@ apply_config() {
   scripts/config --disable SCSI_IPS
   scripts/config --disable SCSI_IPR
 
-  # Filesystems — keep: ext4, xfs, btrfs, f2fs, ntfs3, vfat, tmpfs, squashfs
+  # old filesystems nobody uses. ext4/xfs/btrfs/f2fs/ntfs3 stay
   scripts/config --disable ADFS_FS
   scripts/config --disable AFFS_FS
   scripts/config --disable HFS_FS
@@ -365,7 +353,7 @@ apply_config() {
   scripts/config --disable JFS_FS
   scripts/config --disable OCFS2_FS
 
-  # Input — old/exotic devices
+  # serial joysticks from 1998 or whatever
   scripts/config --disable JOYSTICK_ANALOG
   scripts/config --disable JOYSTICK_A3D
   scripts/config --disable JOYSTICK_ADI
@@ -389,7 +377,7 @@ apply_config() {
   scripts/config --disable TABLET_SERIAL_WACOM4
   scripts/config --disable TABLET_ACECAD
 
-  # Xen — server/cloud virtualization
+  # xen is for servers not laptops
   scripts/config --disable XEN
   scripts/config --disable XEN_DOM0
   scripts/config --disable XEN_SAVE_RESTORE
@@ -405,18 +393,18 @@ apply_config() {
   scripts/config --disable XEN_CONSOLE
   scripts/config --disable XEN_XENBUS_FRONTEND
 
-  # Infiniband — server RDMA
+  # infiniband lmao
   scripts/config --disable INFINIBAND
   scripts/config --disable INFINIBAND_USER_MAD
   scripts/config --disable INFINIBAND_USER_ACCESS
   scripts/config --disable INFINIBAND_ADDR_TRANS
 
-  # ISDN / telephony
+  # isdn, its 2026
   scripts/config --disable ISDN
   scripts/config --disable ISDN_CAPI
   scripts/config --disable PHONE
 
-  # Watchdog — server-specific
+  # server watchdogs
   scripts/config --disable ITCO_WDT
   scripts/config --disable IBMASR
   scripts/config --disable WDTPCI
@@ -425,14 +413,14 @@ apply_config() {
   scripts/config --disable HPWDT
   scripts/config --disable MEI_WDT
 
-  # Staging
+  # staging drivers are usually broken anyway
   scripts/config --disable STAGING
 
-  # ThinkPad ACPI
+  # thinkpad specific stuff, obviously keep
   scripts/config --enable  THINKPAD_ACPI
   scripts/config --enable  HID_LENOVO
 
-  # Vendors — remove
+  # vendor laptop drivers for stuff we dont have
   for opt in \
     DELL_LAPTOP DELL_WMI DELL_SMO8800 \
     HP_ACCEL HP_WMI \
@@ -451,18 +439,18 @@ apply_config() {
     scripts/config --disable "$opt" 2>/dev/null || true
   done
 
-  # HID vendors — remove
+  # hid vendor drivers, not lenovo so bye
   for opt in \
     HID_APPLE HID_ASUS HID_DELL_ACCESSORIES \
     HID_HP HID_SAMSUNG HID_SONY HID_TOSHIBA; do
     scripts/config --disable "$opt" 2>/dev/null || true
   done
 
-  # KVM
+  # kvm amd yes, intel no
   scripts/config --enable  KVM_AMD
   scripts/config --disable KVM_INTEL
 
-  # Legacy network protocols
+  # appletalk lol
   scripts/config --disable NET_APPLETALK
   scripts/config --disable X25
   scripts/config --disable LAPB
@@ -475,7 +463,7 @@ apply_config() {
   scripts/config --disable ECONET
   scripts/config --disable WAN
 
-  # Debug — off
+  # debug off, otherwise modules get massive
   scripts/config --enable  DEBUG_INFO_NONE
   scripts/config --disable DEBUG_INFO_DWARF5
   scripts/config --disable DEBUG_INFO_DWARF4
@@ -512,11 +500,11 @@ apply_config() {
   success "Building: ${kver}"
 }
 
-# ---------------------------------------------------------------
+# compile
 build_kernel() {
   info "Compiling ($JOBS threads)..."
 
-  # x86-64-v3: compatible with all AMD Zen1+ (T495 and newer)
+  # x86-64-v3 works on zen1+ so t495 and everything after
   export KCFLAGS="-O2 -pipe -march=x86-64-v3 -mtune=generic"
   export KCPPFLAGS="$KCFLAGS"
 
@@ -535,7 +523,7 @@ build_kernel() {
   success "Done: ${release}"
 }
 
-# ---------------------------------------------------------------
+# install everything and make the uki
 install_kernel() {
   local kver
   kver=$(cat include/config/kernel.release)
@@ -594,7 +582,7 @@ EOF
   fi
 }
 
-# ---------------------------------------------------------------
+# main
 main() {
   echo -e "\n${BOLD}${CYAN}╔════════════════════════════════════════════════════╗"
   echo -e "║  detkernel-universal — AMD ThinkPad Kernel Builder  ║"
