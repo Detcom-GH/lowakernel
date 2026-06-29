@@ -1,6 +1,7 @@
-# detkernel
+# lowakernel
 
-![detkernel logo](detkernel_logo.png)
+![lowakernel logo](lowakernel_logo.png)
+Changed name from detkernel to lowakernel, because my dog's name is Lowa and I love her too much.
 
 A custom Linux kernel built specifically for AMD-powered ThinkPads. Strips everything that doesn't belong — Intel, NVIDIA, legacy drivers, dead protocols, server-only subsystems — leaving a leaner, more responsive kernel tuned for the hardware that's actually in your machine.
 
