@@ -51,7 +51,7 @@ Download the release for your bootloader from the [Releases](https://github.com/
 Copy the `.efi` file to your EFI partition:
 
 ```
-sudo cp detkernel-universal.efi /boot/EFI/Linux/
+sudo cp lowakernel-universal.efi /boot/EFI/Linux/
 ```
 
 Reboot and select **detkernel** from the boot menu.
@@ -63,8 +63,8 @@ That's it — no additional configuration needed. The `.efi` file is a Unified K
 Copy the kernel and initramfs to your boot partition:
 
 ```
-sudo cp vmlinuz-detkernel-universal /boot/
-sudo cp initramfs-detkernel-universal.img /boot/
+sudo cp vmlinuz-lowakernel-universal /boot/
+sudo cp initramfs-lowakernel-universal.img /boot/
 ```
 
 Add an entry to `/etc/grub.d/40_custom`:
@@ -72,8 +72,8 @@ Add an entry to `/etc/grub.d/40_custom`:
 ```
 menuentry "detkernel-universal" {
     search --no-floppy --fs-uuid --set=root YOUR_UUID
-    linux /boot/vmlinuz-detkernel-universal root=UUID=YOUR_UUID rw quiet
-    initrd /boot/initramfs-detkernel-universal.img
+    linux /boot/vmlinuz-lowakernel-universal root=UUID=YOUR_UUID rw quiet
+    initrd /boot/initramfs-lowakernel-universal.img
 }
 ```
 
@@ -88,14 +88,14 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 Copy the kernel and initramfs to your boot partition:
 
 ```
-sudo cp vmlinuz-detkernel-universal /boot/
-sudo cp initramfs-detkernel-universal.img /boot/
+sudo cp vmlinuz-lowakernel-universal /boot/
+sudo cp initramfs-lowakernel-universal.img /boot/
 ```
 
 Add a stanza to `/boot/refind_linux.conf` or create a manual entry in `refind.conf`:
 
 ```
-"detkernel-universal" "root=UUID=YOUR_UUID rw quiet initrd=/boot/initramfs-detkernel-universal.img"
+"lowakernel-universal" "root=UUID=YOUR_UUID rw quiet initrd=/boot/initramfs-lowakernel-universal.img"
 ```
 
 Replace `YOUR_UUID` with your root partition UUID.
@@ -130,12 +130,12 @@ Then generate a key, sign the kernel, and enroll the key:
 ```
 # Generate a key pair (do this once)
 openssl req -new -x509 -newkey rsa:2048 -keyout MOK.key -out MOK.crt \
-  -days 3650 -subj "/CN=detkernel MOK/" -nodes
+  -days 3650 -subj "/CN=lowakernel MOK/" -nodes
 
 # Sign the UKI
 sudo sbsign --key MOK.key --cert MOK.crt \
-  --output /boot/EFI/Linux/detkernel-universal.efi \
-  /boot/EFI/Linux/detkernel-universal.efi
+  --output /boot/EFI/Linux/lowakernel-universal.efi \
+  /boot/EFI/Linux/lowakernel-universal.efi
 
 # Enroll the key (will prompt on next reboot)
 sudo mokutil --import MOK.crt
@@ -150,14 +150,14 @@ Reboot, follow the MOK enrollment prompt, and Secure Boot will accept the kernel
 ### systemd-boot
 
 ```
-sudo rm /boot/EFI/Linux/detkernel-universal.efi
+sudo rm /boot/EFI/Linux/lowakernel-universal.efi
 ```
 
 ### GRUB / rEFInd
 
 ```
-sudo rm /boot/vmlinuz-detkernel-universal
-sudo rm /boot/initramfs-detkernel-universal.img
+sudo rm /boot/vmlinuz-lowakernel-universal
+sudo rm /boot/initramfs-lowakernel-universal.img
 ```
 
 Remove the boot entry you added, then update your bootloader config.
