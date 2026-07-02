@@ -3,7 +3,7 @@
 ![lowakernel logo](lowakernel_logo.png)
 Changed name from detkernel to lowakernel, because my dog's name is Lowa and I love her too much.
 
-A custom Linux kernel built specifically for AMD-powered ThinkPads. Strips everything that doesn't belong — Intel, NVIDIA, legacy drivers, dead protocols, server-only subsystems — leaving a leaner, more responsive kernel tuned for the hardware that's actually in your machine.
+A custom Linux kernel built specifically for AMD-powered ThinkPads. Strips everything that doesn't belong: Intel, NVIDIA, legacy drivers, dead protocols, server-only subsystems etc., leaving a leaner, more responsive kernel tuned for the hardware that's actually in your machine.
 
 Faster boot. Better responsiveness. Slightly better performance. Lower power consumption.
 
@@ -56,7 +56,7 @@ sudo cp lowakernel-universal.efi /boot/EFI/Linux/
 
 Reboot and select **detkernel** from the boot menu.
 
-That's it — no additional configuration needed. The `.efi` file is a Unified Kernel Image (UKI) that contains the kernel, initramfs, and microcode in a single file.
+That's it, no additional configuration needed. The `.efi` file is a Unified Kernel Image (UKI) that contains the kernel, initramfs, and microcode in a single file.
 
 ### GRUB
 
@@ -106,11 +106,11 @@ Replace `YOUR_UUID` with your root partition UUID.
 
 detkernel is not signed with a distro key, so it won't boot with Secure Boot enabled out of the box. You have two options:
 
-**Option 1 — Disable Secure Boot** (simplest)
+**Option 1: Disable Secure Boot** (simplest)
 
 Go into your BIOS/UEFI settings and disable Secure Boot.
 
-**Option 2 — Enroll your own MOK key** (keeps Secure Boot enabled)
+**Option 2: Enroll your own MOK key** (keeps Secure Boot enabled)
 
 Install sbsigntools for your distro:
 
