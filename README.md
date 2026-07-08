@@ -1,13 +1,14 @@
 # lowakernel
 
 ![lowakernel logo](lowakernel_logo.png)
+
 Changed name from detkernel to lowakernel, because my dog's name is Lowa and I love her too much.
 
 A custom Linux kernel built specifically for AMD-powered ThinkPads. Strips everything that doesn't belong: Intel, NVIDIA, legacy drivers, dead protocols, server-only subsystems etc., leaving a leaner, more responsive kernel tuned for the hardware that's actually in your machine.
 
 Faster boot. Better responsiveness. Slightly better performance. Lower power consumption.
 
-> **Note:** detkernel may work on other AMD-based laptops or desktops, but is only tested and supported on ThinkPads. Use on other hardware at your own risk.
+> **Note:** lowakernel may work on other AMD-based laptops or desktops, but is only tested and supported on ThinkPads. Use on other hardware at your own risk.
 
 ---
 
@@ -50,27 +51,39 @@ Download the release for your bootloader from the [Releases](https://github.com/
 
 Copy the `.efi` file to your EFI partition:
 
-```
+```bash
 sudo cp lowakernel-universal.efi /boot/EFI/Linux/
 ```
 
-Reboot and select **detkernel** from the boot menu.
+Reboot and select **lowakernel** from the boot menu.
 
 That's it, no additional configuration needed. The `.efi` file is a Unified Kernel Image (UKI) that contains the kernel, initramfs, and microcode in a single file.
 
 ### GRUB
 
-Copy the kernel and initramfs to your boot partition:
+Copy the kernel to your boot partition:
 
-```
+```bash
 sudo cp vmlinuz-lowakernel-universal /boot/
-sudo cp initramfs-lowakernel-universal.img /boot/
+```
+
+Generate initramfs for your distro:
+
+```bash
+# Arch / Manjaro
+sudo mkinitcpio -k 7.1.2-lowakernel-universal -g /boot/initramfs-lowakernel-universal.img
+
+# Fedora
+sudo dracut /boot/initramfs-lowakernel-universal.img 7.1.2-lowakernel-universal
+
+# Ubuntu / Debian
+sudo update-initramfs -c -k 7.1.2-lowakernel-universal
 ```
 
 Add an entry to `/etc/grub.d/40_custom`:
 
 ```
-menuentry "detkernel-universal" {
+menuentry "lowakernel-universal" {
     search --no-floppy --fs-uuid --set=root YOUR_UUID
     linux /boot/vmlinuz-lowakernel-universal root=UUID=YOUR_UUID rw quiet
     initrd /boot/initramfs-lowakernel-universal.img
@@ -79,20 +92,19 @@ menuentry "detkernel-universal" {
 
 Replace `YOUR_UUID` with your root partition UUID (find it with `blkid`), then update GRUB:
 
-```
+```bash
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ### rEFInd
 
-Copy the kernel and initramfs to your boot partition:
+Copy the kernel to your boot partition:
 
-```
+```bash
 sudo cp vmlinuz-lowakernel-universal /boot/
-sudo cp initramfs-lowakernel-universal.img /boot/
 ```
 
-Add a stanza to `/boot/refind_linux.conf` or create a manual entry in `refind.conf`:
+Generate initramfs for your distro (same commands as GRUB section above), then add a stanza to `/boot/refind_linux.conf`:
 
 ```
 "lowakernel-universal" "root=UUID=YOUR_UUID rw quiet initrd=/boot/initramfs-lowakernel-universal.img"
@@ -104,7 +116,7 @@ Replace `YOUR_UUID` with your root partition UUID.
 
 ## Secure Boot
 
-detkernel is not signed with a distro key, so it won't boot with Secure Boot enabled out of the box. You have two options:
+lowakernel is not signed with a distro key, so it won't boot with Secure Boot enabled out of the box. You have two options:
 
 **Option 1: Disable Secure Boot** (simplest)
 
@@ -114,7 +126,7 @@ Go into your BIOS/UEFI settings and disable Secure Boot.
 
 Install sbsigntools for your distro:
 
-```
+```bash
 # Arch (-based)
 sudo pacman -S sbsigntools
 
@@ -127,7 +139,7 @@ sudo apt install sbsigntool
 
 Then generate a key, sign the kernel, and enroll the key:
 
-```
+```bash
 # Generate a key pair (do this once)
 openssl req -new -x509 -newkey rsa:2048 -keyout MOK.key -out MOK.crt \
   -days 3650 -subj "/CN=lowakernel MOK/" -nodes
@@ -149,13 +161,13 @@ Reboot, follow the MOK enrollment prompt, and Secure Boot will accept the kernel
 
 ### systemd-boot
 
-```
+```bash
 sudo rm /boot/EFI/Linux/lowakernel-universal.efi
 ```
 
 ### GRUB / rEFInd
 
-```
+```bash
 sudo rm /boot/vmlinuz-lowakernel-universal
 sudo rm /boot/initramfs-lowakernel-universal.img
 ```
@@ -166,4 +178,4 @@ Remove the boot entry you added, then update your bootloader config.
 
 ## License
 
-GPL-2.0 — same as the Linux kernel.
+GPL-2.0, same as the Linux kernel.
