@@ -70,7 +70,7 @@ sudo cp vmlinuz-lowakernel-universal /boot/
 Generate initramfs for your distro:
 
 ```bash
-# Arch / Manjaro
+# Arch / Ath-based
 sudo mkinitcpio -k 7.1.2-lowakernel-universal -g /boot/initramfs-lowakernel-universal.img
 
 # Fedora
