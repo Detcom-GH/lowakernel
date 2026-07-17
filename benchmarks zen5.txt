@@ -1,0 +1,310 @@
+[detcom@detcomp ~]$ uname -r
+7.0.12-detkernel-zen5
+[detcom@detcomp ~]$ stress-ng --cpu 16 --vm 2 --io 4 --timeout 60s --metrics-brief
+stress-ng --cpu 16 --timeout 30s --metrics-brief
+sysbench cpu --threads=16 --time=30 run
+sysbench memory --threads=16 --time=30 run
+sysbench cpu --threads=16 --time=30 run
+glmark2
+for i in 1 2 3; do vkmark 2>/dev/null | grep Score; done
+glmark2 2>/dev/null | grep Score
+glmark2
+glmark2 2>/dev/null | grep Score
+vkmark
+stress-ng: info:  [2684] setting to a 1 min run per stressor
+stress-ng: info:  [2684] dispatching hogs: 16 cpu, 2 vm, 4 io
+stress-ng: info:  [2703] io: this is a legacy I/O sync stressor, consider using iomix instead
+stress-ng: info:  [2701] vm: using 128MB per stressor instance (total 256MB of 19.46GB available memory)
+stress-ng: metrc: [2684] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+stress-ng: metrc: [2684]                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+stress-ng: metrc: [2684] cpu             1274265     60.00    840.06      1.08     21237.45        1514.93
+stress-ng: metrc: [2684] vm              7899118     60.01     88.90     11.29    131630.50       78842.20
+stress-ng: metrc: [2684] io                31788     60.00      0.11      2.23       529.81       13593.63
+stress-ng: info:  [2684] skipped: 0
+stress-ng: info:  [2684] passed: 22: cpu (16) vm (2) io (4)
+stress-ng: info:  [2684] failed: 0
+stress-ng: info:  [2684] metrics untrustworthy: 0
+stress-ng: info:  [2684] successful run completed in 1 min
+stress-ng: info:  [3309] setting to a 30 secs run per stressor
+stress-ng: info:  [3309] dispatching hogs: 16 cpu
+stress-ng: metrc: [3309] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+stress-ng: metrc: [3309]                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+stress-ng: metrc: [3309] cpu              679794     30.00    477.95      0.04     22658.65        1422.18
+stress-ng: info:  [3309] skipped: 0
+stress-ng: info:  [3309] passed: 16: cpu (16)
+stress-ng: info:  [3309] failed: 0
+stress-ng: info:  [3309] metrics untrustworthy: 0
+stress-ng: info:  [3309] successful run completed in 30.01 secs
+sysbench 1.0.20 (using system LuaJIT 2.1.1720049189)
+
+Running the test with following options:
+Number of threads: 16
+Initializing random number generator from current time
+
+
+Prime numbers limit: 10000
+
+Initializing worker threads...
+
+Threads started!
+
+CPU speed:
+    events per second: 38745.30
+
+General statistics:
+    total time:                          30.0004s
+    total number of events:              1162404
+
+Latency (ms):
+         min:                                    0.18
+         avg:                                    0.41
+         max:                                    9.49
+         95th percentile:                        0.49
+         sum:                               479873.77
+
+Threads fairness:
+    events (avg/stddev):           72650.2500/11358.02
+    execution time (avg/stddev):   29.9921/0.00
+
+sysbench 1.0.20 (using system LuaJIT 2.1.1720049189)
+
+Running the test with following options:
+Number of threads: 16
+Initializing random number generator from current time
+
+
+Running memory speed test with the following options:
+  block size: 1KiB
+  total size: 102400MiB
+  operation: write
+  scope: global
+
+Initializing worker threads...
+
+Threads started!
+
+Total operations: 104857600 (19438589.91 per second)
+
+102400.00 MiB transferred (18983.00 MiB/sec)
+
+
+General statistics:
+    total time:                          5.3929s
+    total number of events:              104857600
+
+Latency (ms):
+         min:                                    0.00
+         avg:                                    0.00
+         max:                                    7.09
+         95th percentile:                        0.00
+         sum:                                72503.53
+
+Threads fairness:
+    events (avg/stddev):           6553600.0000/0.00
+    execution time (avg/stddev):   4.5315/0.11
+
+sysbench 1.0.20 (using system LuaJIT 2.1.1720049189)
+
+Running the test with following options:
+Number of threads: 16
+Initializing random number generator from current time
+
+
+Prime numbers limit: 10000
+
+Initializing worker threads...
+
+Threads started!
+
+CPU speed:
+    events per second: 38068.75
+
+General statistics:
+    total time:                          30.0003s
+    total number of events:              1142103
+
+Latency (ms):
+         min:                                    0.18
+         avg:                                    0.42
+         max:                                   12.99
+         95th percentile:                        0.50
+         sum:                               479874.30
+
+Threads fairness:
+    events (avg/stddev):           71381.4375/10369.21
+    execution time (avg/stddev):   29.9921/0.00
+
+=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      AMD
+    GL_RENDERER:    AMD Radeon 860M Graphics (radeonsi, krackan1, ACO, DRM 3.64, 7.0.12-detkernel-zen5)
+    GL_VERSION:     4.6 (Compatibility Profile) Mesa 26.1.2-arch1.1
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false: FPS: 29096 FrameTime: 0.034 ms
+[build] use-vbo=true: FPS: 37873 FrameTime: 0.026 ms
+[texture] texture-filter=nearest: FPS: 25646 FrameTime: 0.039 ms
+[texture] texture-filter=linear: FPS: 24488 FrameTime: 0.041 ms
+[texture] texture-filter=mipmap: FPS: 25796 FrameTime: 0.039 ms
+[shading] shading=gouraud: FPS: 26981 FrameTime: 0.037 ms
+[shading] shading=blinn-phong-inf: FPS: 26441 FrameTime: 0.038 ms
+[shading] shading=phong: FPS: 24971 FrameTime: 0.040 ms
+[shading] shading=cel: FPS: 24516 FrameTime: 0.041 ms
+[bump] bump-render=high-poly: FPS: 19278 FrameTime: 0.052 ms
+[bump] bump-render=normals: FPS: 38238 FrameTime: 0.026 ms
+[bump] bump-render=height: FPS: 37113 FrameTime: 0.027 ms
+[effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 23818 FrameTime: 0.042 ms
+[effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 16240 FrameTime: 0.062 ms
+[pulsar] light=false:quads=5:texture=false: FPS: 25636 FrameTime: 0.039 ms
+[desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 9660 FrameTime: 0.104 ms
+[desktop] effect=shadow:windows=4: FPS: 14382 FrameTime: 0.070 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 2564 FrameTime: 0.390 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 4745 FrameTime: 0.211 ms
+[buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 3147 FrameTime: 0.318 ms
+[ideas] speed=duration: FPS: 15855 FrameTime: 0.063 ms
+[jellyfish] <default>: FPS: 16698 FrameTime: 0.060 ms
+[terrain] <default>: FPS: 1187 FrameTime: 0.843 ms
+[shadow] <default>: FPS: 17957 FrameTime: 0.056 ms
+[refract] <default>: FPS: 1673 FrameTime: 0.598 ms
+[conditionals] fragment-steps=0:vertex-steps=0: FPS: 30373 FrameTime: 0.033 ms
+[conditionals] fragment-steps=5:vertex-steps=0: FPS: 27837 FrameTime: 0.036 ms
+[conditionals] fragment-steps=0:vertex-steps=5: FPS: 29753 FrameTime: 0.034 ms
+[function] fragment-complexity=low:fragment-steps=5: FPS: 28666 FrameTime: 0.035 ms
+[function] fragment-complexity=medium:fragment-steps=5: FPS: 28037 FrameTime: 0.036 ms
+[loop] fragment-loop=false:fragment-steps=5:vertex-steps=5: FPS: 28849 FrameTime: 0.035 ms
+[loop] fragment-steps=5:fragment-uniform=false:vertex-steps=5: FPS: 28839 FrameTime: 0.035 ms
+[loop] fragment-steps=5:fragment-uniform=true:vertex-steps=5: FPS: 28955 FrameTime: 0.035 ms
+=======================================================
+                                  glmark2 Score: 21978
+=======================================================
+                                   vkmark Score: 23347
+                                   vkmark Score: 21354
+                                   vkmark Score: 22283
+                                  glmark2 Score: 21897
+=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      AMD
+    GL_RENDERER:    AMD Radeon 860M Graphics (radeonsi, krackan1, ACO, DRM 3.64, 7.0.12-detkernel-zen5)
+    GL_VERSION:     4.6 (Compatibility Profile) Mesa 26.1.2-arch1.1
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false: FPS: 29945 FrameTime: 0.033 ms
+[build] use-vbo=true: FPS: 39516 FrameTime: 0.025 ms
+[texture] texture-filter=nearest: FPS: 24579 FrameTime: 0.041 ms
+[texture] texture-filter=linear: FPS: 24563 FrameTime: 0.041 ms
+[texture] texture-filter=mipmap: FPS: 25467 FrameTime: 0.039 ms
+[shading] shading=gouraud: FPS: 28319 FrameTime: 0.035 ms
+[shading] shading=blinn-phong-inf: FPS: 26622 FrameTime: 0.038 ms
+[shading] shading=phong: FPS: 25901 FrameTime: 0.039 ms
+[shading] shading=cel: FPS: 24978 FrameTime: 0.040 ms
+[bump] bump-render=high-poly: FPS: 19241 FrameTime: 0.052 ms
+[bump] bump-render=normals: FPS: 39805 FrameTime: 0.025 ms
+[bump] bump-render=height: FPS: 39821 FrameTime: 0.025 ms
+[effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 23113 FrameTime: 0.043 ms
+[effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 15883 FrameTime: 0.063 ms
+[pulsar] light=false:quads=5:texture=false: FPS: 25915 FrameTime: 0.039 ms
+[desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 9560 FrameTime: 0.105 ms
+[desktop] effect=shadow:windows=4: FPS: 14373 FrameTime: 0.070 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 2570 FrameTime: 0.389 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 4546 FrameTime: 0.220 ms
+[buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 3108 FrameTime: 0.322 ms
+[ideas] speed=duration: FPS: 15736 FrameTime: 0.064 ms
+[jellyfish] <default>: FPS: 16524 FrameTime: 0.061 ms
+[terrain] <default>: FPS: 1181 FrameTime: 0.847 ms
+[shadow] <default>: FPS: 17927 FrameTime: 0.056 ms
+[refract] <default>: FPS: 1668 FrameTime: 0.600 ms
+[conditionals] fragment-steps=0:vertex-steps=0: FPS: 30399 FrameTime: 0.033 ms
+[conditionals] fragment-steps=5:vertex-steps=0: FPS: 28228 FrameTime: 0.035 ms
+[conditionals] fragment-steps=0:vertex-steps=5: FPS: 29986 FrameTime: 0.033 ms
+[function] fragment-complexity=low:fragment-steps=5: FPS: 28694 FrameTime: 0.035 ms
+[function] fragment-complexity=medium:fragment-steps=5: FPS: 28350 FrameTime: 0.035 ms
+[loop] fragment-loop=false:fragment-steps=5:vertex-steps=5: FPS: 28788 FrameTime: 0.035 ms
+[loop] fragment-steps=5:fragment-uniform=false:vertex-steps=5: FPS: 28758 FrameTime: 0.035 ms
+[loop] fragment-steps=5:fragment-uniform=true:vertex-steps=5: FPS: 28857 FrameTime: 0.035 ms
+=======================================================
+                                  glmark2 Score: 22208
+=======================================================
+                                  glmark2 Score: 21909
+=======================================================
+    vkmark 2025.01
+=======================================================
+    Vendor ID:      0x1002
+    Device ID:      0x1114
+    Device Name:    AMD Radeon 860M Graphics (RADV KRACKAN1)
+    Driver Version: 109056002
+    Device UUID:    f93acd8264e767d0499400bf43848fbc
+=======================================================
+[vertex] device-local=true: FPS: 33801 FrameTime: 0.030 ms
+[vertex] device-local=false: FPS: 33799 FrameTime: 0.030 ms
+[texture] anisotropy=0: FPS: 22549 FrameTime: 0.044 ms
+[texture] anisotropy=16: FPS: 22425 FrameTime: 0.045 ms
+[shading] shading=gouraud: FPS: 23654 FrameTime: 0.042 ms
+[shading] shading=blinn-phong-inf: FPS: 22078 FrameTime: 0.045 ms
+[shading] shading=phong: FPS: 21133 FrameTime: 0.047 ms
+[shading] shading=cel: FPS: 20288 FrameTime: 0.049 ms
+[effect2d] kernel=edge: FPS: 25626 FrameTime: 0.039 ms
+[effect2d] kernel=blur: FPS: 14315 FrameTime: 0.070 ms
+[desktop] <default>: FPS: 8858 FrameTime: 0.113 ms
+[cube] <default>: FPS: 22484 FrameTime: 0.044 ms
+[clear] <default>: FPS: 28374 FrameTime: 0.035 ms
+=======================================================
+                                   vkmark Score: 23029
+=======================================================
+
+
+
+detcom@detcomp ~> cat /sys/class/power_supply/BAT0/power_now
+13271000
+detcom@detcomp ~> awk '{print $1/1000000 " W"}' /sys/class/power_supply/BAT0/power_now
+13.271 W
+detcom@detcomp ~> cat /sys/class/power_supply/BAT0/status
+                  ls /sys/class/power_supply/
+Discharging
+AC@  BAT0@  ucsi-source-psy-USBC000:001@  ucsi-source-psy-USBC000:002@
+detcom@detcomp ~> cat /sys/class/power_supply/BAT0/current_now
+                  cat /sys/class/power_supply/BAT0/voltage_now
+cat: /sys/class/power_supply/BAT0/current_now: Немає такого файла або каталогу
+16896000
+detcom@detcomp ~> upower -i /org/freedesktop/UPower/devices/battery_BAT0
+  native-path:          BAT0
+  vendor:               Sunwoda
+  model:                5B11H56418
+  serial:               24227
+  power supply:         yes
+  updated:              нд, 14-чер-2026 19:58:33 +0300 (16 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               discharging
+    warning-level:       none
+    energy:              51,19 Wh
+    energy-empty:        0 Wh
+    energy-full:         52,8 Wh
+    energy-full-design:  52,5 Wh
+    voltage-min-design:  15,48 V
+    capacity-level:      Normal
+    energy-rate:         13,271 W
+    voltage:             16,949 V
+    charge-cycles:       9
+    time to empty:       3,9 hours
+    percentage:          97%
+    capacity:            100%
+    technology:          lithium-polymer
+    charge-start-threshold:        75%
+    charge-end-threshold:          80%
+    charge-threshold-supported:    yes
+    icon-name:          'battery-full-symbolic'
+  History (rate):
+    1781456313	13,271	discharging
+  History (voltage):
+    1781456313	16,949	discharging
+    1781456302	17,169	fully-charged
+    1781456276	17,168	fully-charged
