@@ -179,3 +179,5 @@ Remove the boot entry you added, then update your bootloader config.
 ## License
 
 GPL-2.0, same as the Linux kernel.
+
+lowakernel is built on top of [zen-kernel](https://github.com/zen-kernel/zen-kernel), which itself tracks upstream [Linux](https://kernel.org/). This project doesn't patch the kernel source — it's a build script that applies config options on top of zen-kernel's source tree.
