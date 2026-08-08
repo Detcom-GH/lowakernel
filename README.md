@@ -35,7 +35,7 @@ Includes:
 
 ### lowakernel-zen5
 Built with `-march=znver5`, optimized specifically for Zen5 (Ryzen AI 300 series). Includes additional tuning:
-- 500 Hz tick rate for lower latency
+- 1000 Hz tick rate for lower latency
 - BBRv3 TCP congestion control by default
 - NTSYNC (NT synchronization primitives for Wine/Proton)
 
