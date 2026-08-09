@@ -30,14 +30,12 @@ Faster boot. Better responsiveness. Slightly better performance. Lower power con
 ### lowakernel-universal
 Built with `-march=x86-64-v3`, compatible with all AMD Zen1+ ThinkPads (T495 and newer). The safe choice if you're unsure which variant to use.
 
-Includes:
-- NTSYNC (NT synchronization primitives for Wine/Proton) as a module
 
 ### lowakernel-zen5
 Built with `-march=znver5`, optimized specifically for Zen5 (Ryzen AI 300 series). Includes additional tuning:
 - 1000 Hz tick rate for lower latency
 - BBRv3 TCP congestion control by default
-- NTSYNC (NT synchronization primitives for Wine/Proton)
+- NTSYNC (NT synchronization primitives for Wine/Proton) built-in (=y) rather than module, no functional difference from stock zen, kept for completeness
 
 Recommended for: ThinkPad T14 G5–G6, T14s G5–G6, T16 G3, P14s G5–G6.
 
