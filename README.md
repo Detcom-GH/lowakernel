@@ -110,6 +110,36 @@ Generate initramfs for your distro (same commands as GRUB section above), then a
 
 Replace `YOUR_UUID` with your root partition UUID.
 
+### Limine
+
+Copy the kernel to your boot partition:
+
+```bash
+sudo cp vmlinuz-lowakernel-universal /boot/
+```
+
+Generate initramfs for your distro (same commands as GRUB section above), then add an entry to your `limine.conf`:
+
+```
+/lowakernel-universal
+    protocol: linux
+    path: boot():/vmlinuz-lowakernel-universal
+    module_path: boot():/initramfs-lowakernel-universal.img
+    cmdline: root=UUID=YOUR_UUID rw quiet
+```
+
+Replace `YOUR_UUID` with your root partition UUID (find it with `blkid`).
+
+Alternatively, recent Limine versions can chainload the UKI directly:
+
+```
+/lowakernel-universal (UKI)
+    protocol: efi
+    path: boot():/EFI/Linux/lowakernel-universal.efi
+```
+
+For the UKI route, copy the `.efi` file to your ESP first and make sure `/etc/kernel/cmdline` existed at build time (the UKI carries its own cmdline).
+
 ---
 
 ## Secure Boot
