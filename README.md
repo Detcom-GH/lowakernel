@@ -28,7 +28,7 @@ Community-confirmed
 | Model | CPU Generation |
 |-------|---------------|
 | ThinkPad E14 G6 | AMD |
-| ThinkPad E14 G8 | AMD |
+| ThinkPad E14 G8 | AMD Zen 5 (Ryzen AI 400 series), zen5 variant |
 
 Have a model that isn't listed or isn't confirmed? Reports welcome, open an issue.
 
