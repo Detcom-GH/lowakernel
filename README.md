@@ -40,12 +40,12 @@ Have a model that isn't listed or isn't confirmed? Reports welcome, open an issu
 Built with `-march=x86-64-v3`, works on all AMD Zen1+ ThinkPads (T495 and newer). 300 Hz tick rate, same as stock zen. The safe choice if you're not sure which one to pick.
 
 ### lowakernel-zen5
-Built with `-march=znver5`, for Zen5 (Ryzen AI 300 series) only. On top of universal:
+Built with `-march=znver5`, for Zen5 (Ryzen AI 300 and 400 series) only. On top of universal:
 - 1000 Hz tick rate for lower latency
 - BBRv3 TCP congestion control by default
 - NTSYNC built in, so it's always there for Wine/Proton without any extra setup
 
-Recommended for: ThinkPad T14 G5-G6, T14s G5-G6, T16 G3, P14s G5-G6.
+Recommended for: ThinkPad T14 G5-G6, T14s G5-G6, T16 G3, P14s G5-G6, E14 G8
 
 ### lowadetcom
 My personal build, made for exactly one machine: **ThinkPad P14s Gen 6 AMD** (Ryzen AI 7 PRO 350, Radeon 860M). Same as zen5, plus:
