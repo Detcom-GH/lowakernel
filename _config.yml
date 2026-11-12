@@ -1,3 +1,4 @@
 theme: jekyll-theme-hacker
 title: lowakernel
 description: A custom Linux kernel for ThinkPads on AMD
+show_downloads: true
