@@ -53,7 +53,7 @@ My personal build, made for exactly one machine: **ThinkPad P14s Gen 6 AMD** (Ry
 - amdgpu built into the kernel instead of being a module
 - no touchscreen or pen drivers
 
-Don't use it on anything else. Arch only (see below why).
+Don't use it on anything else. lowadetcom is for arch only, because it needs mkinitcpio (see below why).
 
 ---
 
